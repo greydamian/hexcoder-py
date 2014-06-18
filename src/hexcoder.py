@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import sys
+import getopt
 
 __version__ = 'v1.0.0'
 __authors__ = 'Damian Jason Lapidge <grey@greydamian.org>'
@@ -24,17 +25,26 @@ def print_usage():
     print('usage: hexcoder-py [-e] [-d] [-b]', file=sys.stderr)
 
 def parse_args(args):
-    opts = {'mode': ENCODE}
+    optstr = 'edb'
 
-    for s in args:
-        if s == '-e':
-            opts['mode'] = ENCODE
-        elif s == '-d':
-            opts['mode'] = DECODE
-        elif s == '-b':
-            opts['mode'] = BEAUTIFY
+    try:
+        opts, args = getopt.getopt(args[1:], optstr)
+    except getopt.GetoptError:
+        raise ValueError('unrecognised option')
 
-    return opts
+    # result dicts
+    cmdargs = {}
+    cmdopts = {'mode': ENCODE}
+
+    for opt, arg in opts:
+        if opt in ('-e'):
+            cmdopts['mode'] = ENCODE
+        elif opt in ('-d'):
+            cmdopts['mode'] = DECODE
+        elif opt in ('-b'):
+            cmdopts['mode'] = BEAUTIFY
+
+    return cmdopts, cmdargs
 
 def read(f, size):
     return f.read(size)
@@ -77,22 +87,22 @@ def beautify(s):
 
 def main(args):
     try:
-        opts = parse_args(args)
-    except ValueError:
+        cmdopts, cmdargs = parse_args(args)
+    except ValueError as e:
         print_usage()
         return 1 # failure
 
     read_func = read
-    if opts['mode'] == BEAUTIFY or opts['mode'] == DECODE:
+    if cmdopts['mode'] == BEAUTIFY or cmdopts['mode'] == DECODE:
         read_func = readhex
 
     buf = read_func(sys.stdin, BUFSIZE)
     while buf != '':
-        if opts['mode'] == ENCODE:
+        if cmdopts['mode'] == ENCODE:
             buf = buf.encode('hex').upper()
-        if opts['mode'] == BEAUTIFY or opts['mode'] == ENCODE:
+        if cmdopts['mode'] == BEAUTIFY or cmdopts['mode'] == ENCODE:
             buf = beautify(buf)
-        if opts['mode'] == DECODE:
+        if cmdopts['mode'] == DECODE:
             if len(buf) % 2 != 0:
                 buf = buf[:-1]
             buf = buf.decode('hex')
