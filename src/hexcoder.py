@@ -113,5 +113,9 @@ def main(args):
     return 0 # success
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv))
+    try:
+        sys.exit(main(sys.argv))
+    except KeyboardInterrupt:
+        # handle sigint
+        sys.exit(1)
 
