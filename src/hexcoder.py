@@ -116,7 +116,7 @@ if __name__ == '__main__':
     try:
         sys.exit(main(sys.argv))
     except KeyboardInterrupt:
-        # handle sigint
+        # handle SIGINT
         sys.exit(1) # failure
     except SystemExit:
         # ignore SystemExit raised by sys.exit
