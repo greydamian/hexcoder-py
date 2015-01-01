@@ -7,7 +7,7 @@ import getopt
 
 __version__ = 'v1.0.0'
 __authors__ = 'Damian Jason Lapidge <grey@greydamian.org>'
-__license__ = '''Copyright (c) Damian Jason Lapidge
+__license__ = '''Copyright (c) 2014-2015 Damian Jason Lapidge
 
 The contents of this file are subject to the terms and conditions defined 
 within the file LICENSE.txt, located within this project's root directory.
