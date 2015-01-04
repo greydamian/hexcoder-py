@@ -118,10 +118,8 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         # handle SIGINT
         sys.exit(1) # failure
-    except SystemExit:
-        # ignore SystemExit raised by sys.exit
-        pass
-    except:
+    except Exception:
+        # handle all Exception, but not BaseException, subclasses
         print('error: unhandled exception', file=sys.stderr)
         sys.exit(1) # failure
 
