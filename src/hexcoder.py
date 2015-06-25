@@ -17,14 +17,28 @@ BUFSIZE = 32 # must be multiple of 32, so beautify works correctly
 
 HEXCHARS = '0123456789ABCDEFabcdef'
 
+# modes of operation
 ENCODE   = 0
 DECODE   = 1
 BEAUTIFY = 2
 
 def print_usage():
+    """Prints command usage information to stderr."""
     print('usage: hexcoder-py [-e] [-d] [-b]', file=sys.stderr)
 
 def parse_args(args):
+    """Parses the user supplied command line arguments.
+
+    Args:
+        args: List of strings corresponding to supplied command line arguments.
+
+    Returns:
+        A tuple of 2 dictionaries. The first dictionary represents command 
+        options, the second dictionary represents required command arguments.
+
+    Raises:
+        ValueError: A supplied command option is not recognised.
+    """
     optstr = 'edb'
 
     try:
@@ -47,9 +61,30 @@ def parse_args(args):
     return cmdopts, cmdargs
 
 def read(f, size):
+    """Reads bytes from a file.
+
+    Args:
+        f:    File object from which to read data.
+        size: Maximum number of bytes to be read from file.
+
+    Returns:
+        String of bytes read from file.
+    """
     return f.read(size)
 
 def readhex(f, size):
+    """Reads only hexadecimal characters from a file.
+
+    Any non-hexadecimal characters are ignored and omitted from the returned 
+    string.
+
+    Args:
+        f:    File object from which to read data.
+        size: Maximum number of characters to be read from file.
+
+    Returns:
+        String of hexadecimal characters read from file.
+    """
     result = ''
 
     while len(result) < size:
@@ -66,6 +101,17 @@ def readhex(f, size):
     return result
 
 def beautify(s):
+    """Formats a hexadecimal string to make it more easily readable.
+
+    The hexadecimal string is made more easily readable by inserting additional 
+    whitespace characters.
+
+    Args:
+        s: Hexadecimal string to be formatted.
+
+    Returns:
+        Formatted string.
+    """
     result = ''
 
     for i in xrange(len(s)):
@@ -86,6 +132,7 @@ def beautify(s):
     return result
 
 def main(args=None):
+    """Program entry point."""
     try:
         cmdopts, cmdargs = parse_args(args)
     except ValueError as e:
